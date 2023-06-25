@@ -1,4 +1,6 @@
-import { circleTimer, pauseTimer, resetTimer, startTimer, stopTimer, formatNumber } from './timerUtils'
+import {
+  circleTimer, pauseTimer, resetTimer, startTimer, stopTimer,
+} from './timerUtils';
 
 export default class Timer {
   constructor(params) {
@@ -25,7 +27,6 @@ export default class Timer {
     this.btnStop.addEventListener('click', this.stop.bind(this));
     this.btnCircle.addEventListener('click', this.circleClick.bind(this));
     this.btnReset.addEventListener('click', this.reset.bind(this));
-
   }
 
   start() {
@@ -37,15 +38,14 @@ export default class Timer {
   }
 
   stop() {
-    stopTimer(this)
+    stopTimer(this);
   }
 
   circleClick() {
-    circleTimer(this)
+    circleTimer(this);
   }
 
   reset() {
-    resetTimer(this)
+    resetTimer(this);
   }
-
 }
