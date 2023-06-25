@@ -5,6 +5,7 @@ export function pauseTimer(timerId) {
 }
 
 export function stopTimer(timerInstance) {
+    pauseTimer(timerInstance.timerId);
     timerInstance.count = 0;
     timerInstance.countMsecond = 0;
     timerInstance.countMinutes = 0;
@@ -69,6 +70,6 @@ function formatTime(hours, minutes, seconds, milliseconds) {
   return [formattedHour, formattedMinutes, formattedSeconds, formattedMilliseconds];
 }
 
-export function formatNumber(number, digits = 2) {
+function formatNumber(number, digits = 2) {
   return String(number).padStart(digits, '0');
 }

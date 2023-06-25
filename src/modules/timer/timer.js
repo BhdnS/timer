@@ -18,11 +18,6 @@ export default class Timer {
     this.countMsecond = 0;
     this.countMinutes = 0;
     this.countHour = 0;
-    this.hour.innerText = formatNumber(this.countHour);
-    this.minutes.innerText = formatNumber(this.countMinutes);
-    this.second.innerText = formatNumber(this.count);
-    this.msecond.innerText = formatNumber(this.countMsecond, 2);
-    
     this.timerId = null;
 
     this.btnStart.addEventListener('click', this.start.bind(this));
