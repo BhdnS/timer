@@ -1,20 +1,16 @@
-import {
-  circleTimer, pauseTimer, resetTimer, startTimer, stopTimer,
-} from './timerUtils';
-
 export default class Timer {
-  constructor(params) {
-    this.btnStart = params.btnStart;
-    this.btnPause = params.btnPause;
-    this.btnStop = params.btnStop;
-    this.btnCircle = params.btnCircle;
-    this.hour = params.hour;
-    this.minutes = params.minutes;
-    this.second = params.second;
-    this.text = params.text;
-    this.counter = params.counter;
-    this.btnReset = params.btnReset;
-    this.msecond = params.msecond;
+  constructor() {
+    this.btnStart = document.querySelector('.btn__start');
+    this.btnPause = document.querySelector('.btn__pause');
+    this.btnStop = document.querySelector('.btn__stop');
+    this.hour = document.querySelector('#hour');
+    this.minutes = document.querySelector('#minutes');
+    this.second = document.querySelector('#second');
+    this.btnCircle = document.querySelector('.btn__circle');
+    this.text = document.querySelector('.timer__text');
+    this.counter = document.querySelector('.timer__counter');
+    this.btnReset = document.querySelector('.btn__reset');
+    this.msecond = document.querySelector('#msecond');
 
     this.count = 0;
     this.countMsecond = 0;
@@ -30,22 +26,74 @@ export default class Timer {
   }
 
   start() {
-    startTimer(this);
+    this.timerId = setInterval(() => {
+      this.countMsecond++;
+      this.updateTimerDisplay();
+
+      if (this.countMsecond === 99) {
+        this.countMsecond = 0;
+        this.second.innerText = this.count++;
+      }
+
+      if (this.count === 59) {
+        this.count = 0;
+        this.minutes.innerText = this.countMinutes++;
+      }
+
+      if (this.countMinutes === 59) {
+        this.countMinutes = 0;
+        this.hour.innerText = this.countHour++;
+      }
+    }, 10);
   }
 
   pause() {
-    pauseTimer(this.timerId);
+    clearInterval(this.timerId);
   }
 
   stop() {
-    stopTimer(this);
+    this.pause(this.timerId);
+    this.count = 0;
+    this.countMsecond = 0;
+    this.countMinutes = 0;
+    this.countHour = 0;
+    this.hour.innerText = this.formatNumber(this.countHour);
+    this.minutes.innerText = this.formatNumber(this.countMinutes);
+    this.second.innerText = this.formatNumber(this.count);
+    this.msecond.innerText = this.formatNumber(this.countMsecond, 2);
   }
 
   circleClick() {
-    circleTimer(this);
+    const text = `<p class="circle">${this.count++}. ${this.counter.textContent}</p>`;
+    this.text.insertAdjacentHTML('beforeend', text);
   }
 
   reset() {
-    resetTimer(this);
+    this.count = 1;
+    this.stop();
+    const circleText = document.querySelectorAll('.circle');
+    circleText.forEach((e) => e.remove());
+  }
+
+  formatNumber(number, digits = 2) {
+    return String(number).padStart(digits, '0');
+  }
+
+  formatTime(hours, minutes, seconds, milliseconds) {
+    const formattedHour = this.formatNumber(hours);
+    const formattedMinutes = this.formatNumber(minutes);
+    const formattedSeconds = this.formatNumber(seconds);
+    const formattedMilliseconds = this.formatNumber(milliseconds, 2);
+    return [formattedHour, formattedMinutes, formattedSeconds, formattedMilliseconds];
+  }
+
+  updateTimerDisplay() {
+    const formattedTime = this.formatTime(this.countHour, this.countMinutes, this.count, this.countMsecond);
+    const [formattedHour, formattedMinutes, formattedSeconds, formattedMilliseconds] = formattedTime;
+
+    this.hour.innerText = formattedHour;
+    this.minutes.innerText = formattedMinutes;
+    this.second.innerText = formattedSeconds;
+    this.msecond.innerText = formattedMilliseconds;
   }
 }
